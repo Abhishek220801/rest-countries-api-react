@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function CountryCard({name,population,region,flag,capital}) {
+export default function CountryCard({name,population,region,flag,capital,data}) {
   return (
-    <Link to={`/${name}`} className='country-card'>
+    <Link to={`/${name}`} className='country-card' state={data}>
         <img src={flag} alt={name+ ' Flag'} loading='lazy'/>
         <div className="card-text">
             <h3 className="card-title">{name}</h3>

@@ -1,34 +1,44 @@
 import React, { useEffect, useState } from 'react'
+// import countriesData from '../countriesData'
 import CountryCard from './CountryCard'
-import CountriesListShimmer from './CountriesListShimmer.jsx'
+import CountriesListShimmer from './CountriesListShimmer'
 
-export default function CountriesList({query}) {
+export default function CountriesList({ query }) {
   const [countriesData, setCountriesData] = useState([])
-  useEffect(()=>{
+
+  useEffect(() => {
     fetch('https://restcountries.com/v3.1/all')
-      .then((res)=>res.json())
-      .then((data)=>{
+      .then((res) => res.json())
+      .then((data) => {
         setCountriesData(data)
       })
-  },[])
-  
+  }, [])
+
+  if (!countriesData.length) {
+    return <CountriesListShimmer />
+  }
+
   return (
     <>
-     
-      {!countriesData.length ?  <CountriesListShimmer/> : <div className='countries-container'>
-        {
-          countriesData.filter((country)=>country.name.common.toLowerCase().includes(query)).map((country)=>{
-            return <CountryCard 
-              name={country.name.common} 
-              population={country.population}
-              region={country.region}
-              flag={country.flags.svg}
-              capital={country.capital?.[0]}
-              key={crypto.randomUUID()}
-            />
-          })
-        }
-      </div>}
+      <div className="countries-container">
+        {countriesData
+          .filter((country) =>
+            country.name.common.toLowerCase().includes(query)
+          )
+          .map((country) => {
+            return (
+              <CountryCard
+                key={crypto.randomUUID()}
+                name={country.name.common}
+                flag={country.flags.svg}
+                population={country.population}
+                region={country.region}
+                capital={country.capital?.[0]}
+                data={country}
+              />
+            )
+          })}
+      </div>
     </>
   )
 }
