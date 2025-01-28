@@ -1,9 +1,9 @@
 {
   "name": "rest-countries-react",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "keywords": [],
   "author": "",
