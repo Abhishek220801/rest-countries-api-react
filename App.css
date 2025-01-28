@@ -35,6 +35,7 @@ a {
 
 .header-content {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     max-width: 1200px;
@@ -56,7 +57,7 @@ a {
     gap: 64px;
     flex-wrap: wrap;
     margin-inline: auto;
-    justify-content: space-between;
+    justify-content: start;
 }
 
 .country-card {

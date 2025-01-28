@@ -1,0 +1,14 @@
+.shimmer-card{
+    height: 383.2px;
+    width: 250px;
+    background-color: #cccccc46;
+    display: inline-block;
+    /* width: 250px; */
+    border-radius: 8px;
+    /* overflow: hidden; */
+    padding-bottom: 24px;
+    box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.2);
+    margin-bottom: 50px;
+    /* transition: all 0.2s ease-in-out;
+    background-color: var(--elements-color); */
+}

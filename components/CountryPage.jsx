@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import '../CountryPage.css'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export default function CountryPage() {
     const [countryData, setCountryData] = useState(null)
+    const [notFound, setNotFound] = useState(false)
     const params = useParams();
     const countryName = params.country;
+
+
+
     useEffect(()=>{
         fetch(`https://restcountries.com/v3.1/name/${countryName}?fullText=true`)
          .then((res)=>res.json())
@@ -22,21 +26,30 @@ export default function CountryPage() {
             flagAlt: data.flags.alt,
             currencies: data.currencies ? Object.values(data.currencies).map(currency => currency.name).join(', ') : 'N/A',
             languages: data.languages ? Object.values(data.languages).join(', ') : 'N/A',
+            borders: []
           })
-       })}, [])
 
-//        const flagImage = document.querySelector('.country-details img')
-// const countryNameH1 = document.querySelector('.country-details h1')
-// const nativeName = document.querySelector('.native-name')
-// const population = document.querySelector('.population')
-// const region = document.querySelector('.region')
-// const subRegion = document.querySelector('.sub-region')
-// const capital = document.querySelector('.capital')
-// const topLevelDomain = document.querySelector('.top-level-domain')
-// const currencies = document.querySelector('.currencies')
-// const languages = document.querySelector('.languages')
-// const borderCountries = document.querySelector('.border-countries')
+          if(!data.borders){
+            data.borders = []
+          }
+          Promise.all(data.borders.map((border)=>{
+            return fetch(`https://restcountries.com/v3.1/alpha/${border}`)
+            .then((res)=>res.json())
+            .then(([borderCountry]) => borderCountry.name.common)
+            })).then((borders)=>{
+              console.log(borders)
+              setCountryData((prev)=>({...prev, borders}))
+            }) 
+          })
+        .catch((err)=>{
+          setNotFound(true)
+          console.log(err)
+        })
+      }, [countryName])
 
+    if(notFound){
+      return <div>Country Not Found...</div>
+    }
 
   return (
     countryData === null? 'Loading...' : (
@@ -61,7 +74,12 @@ export default function CountryPage() {
               <p><b>Currencies: </b><span className="currencies">{countryData.currencies}</span></p>
               <p><b>Languages: </b><span className="languages">{countryData.languages}</span></p>
             </div>
-            <div className="border-countries"><b>Border Countries: </b>&nbsp;</div>
+            {countryData.borders.length !== 0 && <div className="border-countries">
+              <b>Border Countries: </b>&nbsp;
+            {
+              countryData.borders.map((border)=> <Link key={crypto.randomUUID()} to={`/${border}`}>{border}</Link>)
+            }
+            </div>}
           </div>
         </div>
       </div>
